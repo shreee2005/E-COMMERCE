@@ -3,23 +3,18 @@ package com.E_Commerce.E_Commerce.Service;
 import com.E_Commerce.E_Commerce.Model.Product;
 import com.E_Commerce.E_Commerce.Repository.CategoryRepository;
 import com.E_Commerce.E_Commerce.Repository.ProductRepository;
+import com.E_Commerce.E_Commerce.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProductService {
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ProductRepository productRepository;
+public interface ProductService {
+    public List<Product> getAllProducts();
 
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
-    }
+    public Product getProductById(Long id);
 
-    public Product getProductById(Long id){
-        return productRepository.findById(id).get();
-    }
+    public String addProduct(ProductDto productDto);
+
 }

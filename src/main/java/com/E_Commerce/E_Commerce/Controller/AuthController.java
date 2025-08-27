@@ -1,6 +1,6 @@
 package com.E_Commerce.E_Commerce.Controller;
 
-import com.E_Commerce.E_Commerce.Model.ResgisterDto; // Corrected class name
+import com.E_Commerce.E_Commerce.dto.ResgisterDto; // Corrected class name
 import com.E_Commerce.E_Commerce.Service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.E_Commerce.E_Commerce.Service.ServiceImpl;
 
-import com.E_Commerce.E_Commerce.Model.ResgisterDto;
+import com.E_Commerce.E_Commerce.dto.ResgisterDto;
 import com.E_Commerce.E_Commerce.Model.Role;
 import com.E_Commerce.E_Commerce.Model.User;
 import com.E_Commerce.E_Commerce.Repository.RoleRepository;

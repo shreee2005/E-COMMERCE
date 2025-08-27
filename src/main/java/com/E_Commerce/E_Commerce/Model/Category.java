@@ -18,4 +18,5 @@ public class Category {
     private Long id;
     @Column(nullable = false , unique = true)
     private String categoryName;
+
 }
