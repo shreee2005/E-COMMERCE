@@ -1,4 +1,5 @@
 package com.E_Commerce.E_Commerce.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class Product{
     @Column(nullable = false)
     private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Use LAZY fetch for better performance
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoy_id")
     private Category category;
 
