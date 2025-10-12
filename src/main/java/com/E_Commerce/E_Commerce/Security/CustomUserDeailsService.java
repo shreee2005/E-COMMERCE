@@ -21,6 +21,8 @@ public class CustomUserDeailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    // In: CustomUserDeailsService.java
+
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
 
@@ -34,8 +36,9 @@ public class CustomUserDeailsService implements UserDetailsService {
                 .map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
 
+        // CORRECTED LINE: Use username for consistency with the JWT subject.
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
+                user.getUsername(), // <-- Change this
                 user.getPassword(),
                 authorities
         );

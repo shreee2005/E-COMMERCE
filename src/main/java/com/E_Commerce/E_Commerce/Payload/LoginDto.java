@@ -1,4 +1,4 @@
-package com.E_Commerce.E_Commerce.dto;
+package com.E_Commerce.E_Commerce.Payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

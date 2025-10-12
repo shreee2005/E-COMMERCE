@@ -6,7 +6,7 @@ import com.E_Commerce.E_Commerce.Model.User;
 import com.E_Commerce.E_Commerce.Repository.RoleRepository;
 import com.E_Commerce.E_Commerce.Repository.UserRepository;
 import com.E_Commerce.E_Commerce.Service.AuthService;
-import com.E_Commerce.E_Commerce.dto.LoginDto;
+import com.E_Commerce.E_Commerce.Payload.LoginDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

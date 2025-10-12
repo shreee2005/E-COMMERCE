@@ -33,13 +33,13 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-
     @PostMapping("/add")
 //    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String > addProduct(@RequestBody ProductDto productDto) {
         String product1 = productService.addProduct(productDto).orElseThrow(()-> new InvalidProductToAdd("Invalid Product"));
         return new ResponseEntity<>(product1, HttpStatus.OK);
     }
+
 
 
 }

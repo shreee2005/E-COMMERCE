@@ -7,13 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class ResgisterDto {
     private String firstName;
     private String lastName;
     private String username;
-    private String Email;
-    private String Password;
+    private String email;
+    private String password;
 
 }

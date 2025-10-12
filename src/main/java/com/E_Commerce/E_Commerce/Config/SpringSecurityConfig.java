@@ -1,29 +1,38 @@
 package com.E_Commerce.E_Commerce.Config;
 
+
+import com.E_Commerce.E_Commerce.Security.JwtAuthenticationEntrypoint;
+import com.E_Commerce.E_Commerce.Security.JwtAuthenticationEntrypoint;
+import com.E_Commerce.E_Commerce.Security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod; // <-- IMPORTANT: Add this import
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
 @EnableMethodSecurity
 public class SpringSecurityConfig {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationEntrypoint authenticationEntryPoint;
+    private final JwtAuthenticationFilter authenticationFilter; // <-- The filter to be injected
 
-    public SpringSecurityConfig(UserDetailsService userDetailsService) {
+    // Inject dependencies via constructor
+    public SpringSecurityConfig(UserDetailsService userDetailsService,
+                                JwtAuthenticationEntrypoint authenticationEntryPoint,
+                                JwtAuthenticationFilter authenticationFilter) {
         this.userDetailsService = userDetailsService;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
     }
 
     @Bean
@@ -32,28 +41,36 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults()) // <-- CHANGE 1: ENABLE CORS
-                .authorizeHttpRequests((authorize) -> {
-                    // Define public endpoints that do not require authentication
-                    authorize.requestMatchers("/api/auth/**").permitAll();
-
-                    // <-- CHANGE 2: EXPLICITLY PERMIT PREFLIGHT REQUESTS
-                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-
-                    // <-- CHANGE 3: PERMIT GETTING PRODUCTS FOR EASIER TESTING
-                    authorize.requestMatchers(HttpMethod.GET, "/api/products/all").permitAll();
-
-                    // All other requests must be authenticated
-                    authorize.anyRequest().authenticated();
-
-                }).httpBasic(Customizer.withDefaults());
-        return http.build();
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    // In: com/E_Commerce/E_Commerce/Config/SpringSecurityConfig.java
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests((authorize) ->
+                        authorize
+                                // Allow public access for registration and login
+                                .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                                // IMPORTANT: Allow anyone to VIEW products
+                                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                                .requestMatchers(HttpMethod.POST , "/api/cart/**").permitAll()
+                                .requestMatchers(HttpMethod.POST , "/api/orders/**").permitAll()
+                                // All other requests must be authenticated
+                                .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(authenticationEntryPoint)
+                )
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
+
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 }
