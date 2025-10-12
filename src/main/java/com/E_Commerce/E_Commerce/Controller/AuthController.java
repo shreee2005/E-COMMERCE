@@ -51,7 +51,6 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // FIX: This line will now work correctly because jwtTokenProvider is not null.
         String token = jwtTokenProvider.generateJwtToken(authentication.getName());
 
         JwtAuthResponseDto response = new JwtAuthResponseDto();

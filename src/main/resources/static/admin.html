@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Add Product</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Add New Product (Admin) 🛠️</h1>
+    <nav>
+        <a href="index.html">View All Products</a>
+    </nav>
+</header>
+
+<main>
+    <form id="add-product-form" class="form-container">
+        <input type="text" id="name" name="name" placeholder="Product Name" required>
+        <textarea id="description" name="description" placeholder="Product Description" required></textarea>
+        <input type="number" id="price" name="price" placeholder="Price" step="0.01" required>
+        <input type="number" id="stockQuantity" name="stockQuantity" placeholder="Stock Quantity" required>
+        <input type="text" id="imageUrl" name="imageUrl" placeholder="Image URL" required>
+        <input type="number" id="categoryId" name="categoryId" placeholder="Category ID" required>
+        <button type="submit">Add Product</button>
+    </form>
+    <div id="response-message"></div>
+</main>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

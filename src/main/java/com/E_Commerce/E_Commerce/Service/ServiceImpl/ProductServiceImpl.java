@@ -4,9 +4,13 @@ import com.E_Commerce.E_Commerce.Model.Category;
 import com.E_Commerce.E_Commerce.Model.Product;
 import com.E_Commerce.E_Commerce.Repository.CategoryRepository;
 import com.E_Commerce.E_Commerce.Repository.ProductRepository;
+import com.E_Commerce.E_Commerce.Repository.specification.ProductSpecification;
 import com.E_Commerce.E_Commerce.Service.ProductService;
 import com.E_Commerce.E_Commerce.dto.ProductDto;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +54,12 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(product);
         return ("Product added successfully to category: " + category.getCategoryName()).describeConstable();
+    }
+
+    @Override
+    public Page<Product> searchAndFilterProducts(String query, String category, Double minPrice, Double maxPrice, Pageable pageable) {
+        Specification<Product> spec= ProductSpecification.findByCriteria(query , category , minPrice , maxPrice);
+        return productRepository.findAll(spec , pageable);
     }
 
 }

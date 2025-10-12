@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,7 +47,18 @@ public class SpringSecurityConfig {
     }
 
     // In: com/E_Commerce/E_Commerce/Config/SpringSecurityConfig.java
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
+        // Tell the provider how to find users
+        authProvider.setUserDetailsService(userDetailsService);
+
+        // Tell the provider how to check passwords
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
+    }
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
